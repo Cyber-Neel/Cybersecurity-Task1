@@ -9,7 +9,11 @@ The objective of this task is to perform network reconnaissance by scanning my l
 
 ## Tools Used
 - **Nmap**: An open-source network scanning tool used to discover devices, open ports, and services on the network. Pre-installed on Kali Linux.
+- ![Screenshot 2025-06-23 164756](https://github.com/user-attachments/assets/d01b5811-d236-4714-9dd6-7004de51c9f5)
+
 - **Wireshark** (Optional): A packet analyzer used to capture and inspect network traffic, providing deeper insights into scan activities. Pre-installed on Kali Linux.
+- ![Screenshot 2025-06-23 164819](https://github.com/user-attachments/assets/45e45d19-2d50-4818-a5ba-0e4017a80039)
+
 
 ## Environment
 - **Operating System**: Kali Linux (2025.2 or latest version)
@@ -23,14 +27,19 @@ The objective of this task is to perform network reconnaissance by scanning my l
 
 2. **Identified Local Network Range**:
    - Used `ifconfig` to find my IP address (e.g., `192.168.1.100`) and subnet mask (`255.255.255.0`).
+   - ![Screenshot 2025-06-23 151737](https://github.com/user-attachments/assets/90f2323b-1f61-4b09-ac6a-9fe11e1a09be)
+
    - Determined the network range as `192.168.1.0/24`, covering IPs from `192.168.1.0` to `192.168.1.255`.
 
 3. **Executed TCP SYN Scan with Nmap**:
    - Ran the command: `sudo nmap -sS 192.168.1.0/24`.
+   - ![Screenshot 2025-06-23 153157](https://github.com/user-attachments/assets/1343dd5c-04b4-4f32-b8ae-9badea9ddd2c)
    - The `-sS` flag performed a stealthy TCP SYN scan, sending SYN packets to detect open ports without completing TCP handshakes.
    - Saved results to text and HTML formats:
      - Text: `sudo nmap -sS 192.168.1.0/24 -oN scan_results.txt`
      - HTML: `sudo nmap -sS 192.168.1.0/24 -oX scan_results.xml && xsltproc scan_results.xml -o scan_results.html`
+     - ![Screenshot 2025-06-23 153838](https://github.com/user-attachments/assets/830f02cf-ed4c-4d77-9e96-af318eeb69e1)
+
 
 4. **Analyzed Scan Results**:
    - Reviewed `scan_results.txt` to identify devices (IP addresses) and their open ports.
@@ -43,9 +52,11 @@ The objective of this task is to perform network reconnaissance by scanning my l
 5. **Captured Packets with Wireshark** (Optional):
    - Launched Wireshark: `sudo wireshark &`
    - Selected the active interface (`wlan0`) and started capturing packets.
+   - ![Screenshot 2025-06-23 161452](https://github.com/user-attachments/assets/75bd78da-3334-4c24-a864-01434fb6a956)
    - Re-ran the Nmap scan to generate traffic: `sudo nmap -sS 192.168.1.0/24`.
    - Filtered for `tcp` packets to observe SYN and SYN-ACK exchanges.
    - Saved the capture as `scan_capture.pcapng`.
+   - ![Screenshot 2025-06-23 161512](https://github.com/user-attachments/assets/f720d20c-160e-4d28-b6de-fd9a914fa193)
    - Summarized observations in `analysis.txt`, confirming active services (e.g., HTTP responses on port 80).
 
 6. **Prepared Submission**:
@@ -81,7 +92,7 @@ The objective of this task is to perform network reconnaissance by scanning my l
 - Deepen Wireshark proficiency by mastering filters and analyzing specific protocols.
 
 ## Acknowledgments
-- **Elevate Cybersecurity Internship**: For providing this hands-on learning opportunity.
+- **Elevate Labs Cybersecurity Internship**: For providing this hands-on learning opportunity.
 - **Nmap and Wireshark Communities**: For maintaining robust, free tools that empower cybersecurity learning.
 - **Neel Bhatt**: For diligently completing this task and documenting the process.
 
