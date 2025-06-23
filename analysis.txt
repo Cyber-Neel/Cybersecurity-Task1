@@ -1,0 +1,120 @@
+# Analysis of Local Network Port Scan
+Author: Neel Bhatt
+Date: June 23, 2025
+Task: Cybersecurity Internship Task 1 - Local Network Port Scanning
+
+This document analyzes the results of a TCP SYN scan performed on my local network (192.168.0.0/24) using Nmap on Kali Linux. The scan results are sourced from `scan_results.html`, generated on Mon Jun 23 15:34:12 2025. Below, I detail each IP address scanned, open ports and their services, reference services using standard port assignments, and identify potential security risks.
+
+## 1. IP Addresses Scanned
+The Nmap scan targeted the network range 192.168.0.0/24, covering 256 IP addresses. Three hosts were found online (responded to the scan):
+- 192.168.0.1
+- 192.168.0.110
+- 192.168.0.112
+
+## 2. Open Ports and Services
+Below are the open ports and associated services for each online host, as reported by Nmap.
+
+### 192.168.0.1
+- **MAC Address**: 90:9A:4A:5D:BE:98 (TP-Link Technologies)
+- **Open Ports and Services**:
+  - 23/tcp: telnet (syn-ack response)
+  - 53/tcp: domain (syn-ack response)
+  - 80/tcp: http (syn-ack response)
+  - 1900/tcp: upnp (syn-ack response)
+- **Note**: 996 other ports were closed (replied with reset).
+
+### 192.168.0.110
+- **MAC Address**: 4C:44:5B:87:25:5D (Intel Corporate)
+- **Open Ports and Services**:
+  - 3306/tcp: mysql (syn-ack response)
+- **Note**: 999 other ports were filtered (no response).
+
+### 192.168.0.112
+- **MAC Address**: Not detected
+- **Open Ports and Services**:
+  - None (all 1000 scanned ports were closed, replied with reset).
+
+## 3. Service Reference
+Using standard port assignments (referenced from IANA and common cybersecurity resources), I analyzed the services associated with the open ports:
+
+- **Port 23/tcp (telnet)** on 192.168.0.1:
+  - **Service**: Telnet provides remote command-line access to devices.
+  - **Description**: An outdated, unencrypted protocol for remote administration, typically used on routers or legacy systems.
+  - **Reference**: IANA assigns port 23 to Telnet.
+
+- **Port 53/tcp (domain)** on 192.168.0.1:
+  - **Service**: Domain Name System (DNS) resolves domain names to IP addresses.
+  - **Description**: Commonly used by routers acting as DNS servers or forwarders for local network devices.
+  - **Reference**: IANA assigns port 53 to DNS (both TCP and UDP).
+
+- **Port 80/tcp (http)** on 192.168.0.1:
+  - **Service**: HyperText Transfer Protocol (HTTP) serves web content.
+  - **Description**: Likely a web interface for router administration, accessible via a browser.
+  - **Reference**: IANA assigns port 80 to HTTP; also referenced in provided task guidelines.
+
+- **Port 1900/tcp (upnp)** on 192.168.0.1:
+  - **Service**: Universal Plug and Play (UPnP) enables device discovery and configuration.
+  - **Description**: Used by routers and IoT devices for automatic network setup, but can be exploited if misconfigured.
+  - **Reference**: IANA assigns port 1900 to SSDP/UPnP.
+
+- **Port 3306/tcp (mysql)** on 192.168.0.110:
+  - **Service**: MySQL is a database management system.
+  - **Description**: Used for database access, often by applications or servers hosting databases.
+  - **Reference**: IANA assigns port 3306 to MySQL.
+
+- **Additional Reference Ports** (from task guidelines, not found in scan):
+  - **21/tcp (FTP)**: File Transfer Protocol, unencrypted, risky if exposed.
+  - **22/tcp (SSH)**: Secure Shell, for secure remote access.
+  - **443/tcp (HTTPS)**: Secure HTTP, for encrypted web traffic.
+  - **3389/tcp (RDP)**: Remote Desktop Protocol, risky if exposed.
+
+## 4. Potential Security Risks
+Based on the open ports and services, I identified the following security risks for each host:
+
+### 192.168.0.1 (Likely a Router)
+- **Unnecessary Service: Telnet (Port 23/tcp)**:
+  - **Risk**: Telnet is outdated and transmits data (including credentials) in plaintext, making it vulnerable to interception by attackers using packet sniffing.
+  - **Impact**: Unauthorized access to the router’s administration interface could allow network reconfiguration or compromise.
+  - **Mitigation**: Disable Telnet and use SSH (port 22) if remote access is needed. Ensure strong passwords and restrict access via firewall rules.
+- **Misconfigured Service: HTTP (Port 80/tcp)**:
+  - **Risk**: The HTTP web interface may lack HTTPS redirection (port 443 not open), exposing login credentials to interception. Misconfigured or outdated router firmware could have known vulnerabilities.
+  - **Impact**: Attackers could exploit weak authentication or firmware flaws to gain control of the router.
+  - **Mitigation**: Enable HTTPS if available, update router firmware, and restrict web interface access to trusted IPs.
+- **UPnP Exposure (Port 1900/tcp)**:
+  - **Risk**: UPnP is often targeted by malware to open ports or redirect traffic. Misconfigured UPnP can allow unauthorized devices to join the network.
+  - **Impact**: Compromised UPnP could lead to network-wide attacks, such as port forwarding to internal devices.
+  - **Mitigation**: Disable UPnP unless required, and monitor devices using UPnP for suspicious activity.
+- **DNS Service (Port 53/tcp)**:
+  - **Risk**: If the DNS service is misconfigured or exposed externally, it could be abused for DNS amplification attacks or cache poisoning.
+  - **Impact**: Network performance degradation or redirection to malicious sites.
+  - **Mitigation**: Restrict DNS access to internal network devices and ensure the router uses secure DNS resolvers.
+
+### 192.168.0.110 (Likely a Computer or Server)
+- **Exposed MySQL Service (Port 3306/tcp)**:
+  - **Risk**: MySQL exposed on the network could allow unauthorized access if credentials are weak or the database server is unpatched. Many MySQL vulnerabilities (e.g., CVE-2016-6662) target port 3306.
+  - **Impact**: Attackers could extract sensitive data, modify databases, or gain a foothold on the host.
+  - **Mitigation**: Restrict MySQL access to localhost or specific IPs via firewall rules, use strong credentials, and apply the latest MySQL patches.
+- **Filtered Ports (999 ports)**:
+  - **Observation**: Most ports are filtered, suggesting a firewall is active, which is good practice.
+  - **Risk**: The open MySQL port indicates a deliberate exposure, which may be unnecessary if the database isn’t accessed by other network devices.
+  - **Mitigation**: Confirm whether MySQL needs to be network-accessible; if not, bind it to localhost.
+
+### 192.168.0.112 (Unknown Device)
+- **No Open Ports**:
+  - **Observation**: All 1000 scanned ports are closed, indicating no exposed services.
+  - **Risk**: Low, as no services are accessible. However, the device’s presence (localhost-response ping) without a MAC address raises questions about its identity.
+  - **Potential Issue**: Could be an unauthorized or misconfigured device if not recognized by the network owner.
+  - **Mitigation**: Investigate the device’s role (e.g., check DHCP logs or physically inspect connected devices). Use Nmap’s OS detection (`-O`) to identify it further.
+
+### General Risks
+- **Unexpected Devices**: The device at 192.168.0.112 has no open ports or MAC address, making it difficult to identify. If unrecognized, it could be an unauthorized device (e.g., a rogue IoT device or intruder).
+  - **Mitigation**: Cross-check all devices against known network inventory and enable MAC filtering on the router.
+- **Lack of SSH or HTTPS**: No devices use port 22 (SSH) or 443 (HTTPS), which are secure alternatives to Telnet and HTTP. This suggests reliance on insecure protocols.
+  - **Mitigation**: Transition to SSH and HTTPS where possible.
+- **No FTP or RDP Detected**: Ports 21 (FTP) and 3389 (RDP) were not open, reducing risks from these inherently insecure services.
+
+## Summary
+The scan revealed three active hosts on the 192.168.0.0/24 network. The router (192.168.0.1) has multiple open ports, with Telnet and UPnP posing significant risks due to their insecurity. The device at 192.168.0.110 exposes a MySQL service, which is concerning if not properly secured. The device at 192.168.0.112 appears secure (no open ports) but requires identification to rule out unauthorized access. Recommended actions include disabling insecure services, enabling firewalls, updating software, and investigating unknown devices to enhance network security.
+
+Neel Bhatt
+Cybersecurity Internship Task 1
