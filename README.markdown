@@ -18,7 +18,7 @@ The objective of this task is to perform network reconnaissance by scanning my l
 ## Environment
 - **Operating System**: Kali Linux (2025.2 or latest version)
 - **Network**: Local home Wi-Fi network (scanned with explicit permission)
-- **IP Range**: `192.168.1.0/24` (determined via `ifconfig` or `ip addr`)
+- **IP Range**: `192.168.0.0/24` (determined via `ifconfig` or `ip addr`)
 
 ## Steps Performed
 1. **Verified Tool Installation**:
@@ -26,21 +26,21 @@ The objective of this task is to perform network reconnaissance by scanning my l
    - Both tools were pre-installed, requiring no additional setup.
 
 2. **Identified Local Network Range**:
-   - Used `ifconfig` to find my IP address (e.g., `192.168.1.100`) and subnet mask (`255.255.255.0`).
+   - Used `ifconfig` to find my IP address (e.g., `192.168.0.122`) and subnet mask (`255.255.255.0`).
    - ![Screenshot 2025-06-23 151737](https://github.com/user-attachments/assets/90f2323b-1f61-4b09-ac6a-9fe11e1a09be)
 
-   - Determined the network range as `192.168.1.0/24`, covering IPs from `192.168.1.0` to `192.168.1.255`.
+   - Determined the network range as `192.168.0.0/24`, covering IPs from `192.168.1.0` to `192.168.1.255`.
 
 3. **Executed TCP SYN Scan with Nmap**:
    - Ran the command: `sudo nmap -sS 192.168.1.0/24`.
    - ![Screenshot 2025-06-23 153157](https://github.com/user-attachments/assets/1343dd5c-04b4-4f32-b8ae-9badea9ddd2c)
    - The `-sS` flag performed a stealthy TCP SYN scan, sending SYN packets to detect open ports without completing TCP handshakes.
    - Saved results to text and HTML formats:
-     - Text: `sudo nmap -sS 192.168.1.0/24 -oN scan_results.txt`
-     - HTML: `sudo nmap -sS 192.168.1.0/24 -oX scan_results.xml && xsltproc scan_results.xml -o scan_results.html`
+     - Text: `sudo nmap -sS 192.168.0.0/24 -oN scan_results.txt`
+     - HTML: `sudo nmap -sS 192.168.0.0/24 -oX scan_results.xml && xsltproc scan_results.xml -o scan_results.html`
      - ![Screenshot 2025-06-23 153838](https://github.com/user-attachments/assets/830f02cf-ed4c-4d77-9e96-af318eeb69e1)
-
-
+     - To view the scan_results.html file in a web browser using htmlpreview.github.io, follow these steps:-
+       
 4. **Analyzed Scan Results**:
    - Reviewed `scan_results.txt` to identify devices (IP addresses) and their open ports.
    - Documented findings in `analysis.txt`, including:
@@ -66,7 +66,6 @@ The objective of this task is to perform network reconnaissance by scanning my l
    - Submitted the repository URL via the internship’s submission link before the 10:00 PM deadline.
 
 ## Files Included
-- **`scan_results.txt`**: Nmap scan output in text format, listing IPs, open ports, and services.
 - **`scan_results.html`**: Nmap scan output in HTML format, for better readability.
 - **`analysis.txt`**: Detailed analysis of scanned IPs, open ports, services, and identified security risks.
 - **`scan_capture.pcapng`** (Optional): Wireshark packet capture file, showing network traffic during the Nmap scan.
