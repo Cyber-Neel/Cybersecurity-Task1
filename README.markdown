@@ -39,8 +39,19 @@ The objective of this task is to perform network reconnaissance by scanning my l
      - Text: `sudo nmap -sS 192.168.0.0/24 -oN scan_results.txt`
      - HTML: `sudo nmap -sS 192.168.0.0/24 -oX scan_results.xml && xsltproc scan_results.xml -o scan_results.html`
      - ![Screenshot 2025-06-23 153838](https://github.com/user-attachments/assets/830f02cf-ed4c-4d77-9e96-af318eeb69e1)
-     - To view the scan_results.html file in a web browser using htmlpreview.github.io, follow these steps:-
-       
+     - To Preview the scan_results.html file in a web browser using htmlpreview.github.io, follow these steps:-
+
+      Step 1 :- Go to scan_results.html file and above the history option ( right side corner ) click 3 dot and now copy the permalink .
+             ![Step 1](https://github.com/user-attachments/assets/9334f894-e725-4d25-b78d-e277951ed944)
+             ![Step 2](https://github.com/user-attachments/assets/98bd6420-a93e-4db3-a0a4-481153c1f4db)
+
+      Step 2 :- Now go to this website :- https://htmlpreview.github.io/                                  
+             ![Screenshot 2025-06-23 180609](https://github.com/user-attachments/assets/1f1dee70-d028-49dd-b5af-4fbe85ee1103)
+
+      Step 3 :- Now paste the permalink that you copied before and click on preview button ( done )
+             ![Step last](https://github.com/user-attachments/assets/e0dd627d-55d7-4799-b33f-25ecdc0e1162)
+
+
 4. **Analyzed Scan Results**:
    - Reviewed `scan_results.txt` to identify devices (IP addresses) and their open ports.
    - Documented findings in `analysis.txt`, including:
